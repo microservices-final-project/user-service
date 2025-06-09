@@ -135,12 +135,18 @@ public class CredentialServiceImpl implements CredentialService {
 
 		return CredentialMappingHelper.map(updatedCredential);
 	}
-	
+
 	@Transactional
 	@Override
 	public void deleteById(final Integer credentialId) {
 		log.info("*** Void, service; delete credential by id *");
-		this.credentialRepository.deleteById(credentialId);
+
+		boolean exists = credentialRepository.existsById(credentialId);
+		if (!exists) {
+			throw new CredentialNotFoundException("Credential with id: "+credentialId+" not found");
+		}
+
+		this.credentialRepository.deleteByCredentialId(credentialId);
 	}
 
 }

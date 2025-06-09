@@ -12,7 +12,6 @@ import com.selimhorri.app.domain.User;
 import com.selimhorri.app.dto.UserDto;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
 import com.selimhorri.app.helper.UserMappingHelper;
-import com.selimhorri.app.repository.CredentialRepository;
 import com.selimhorri.app.repository.UserRepository;
 import com.selimhorri.app.service.UserService;
 
