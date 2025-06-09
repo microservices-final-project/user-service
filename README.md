@@ -20,6 +20,8 @@ Errores:
 - Recibe al userId como parámetro, lo cual rompe cuando el id ya es de otro usuarios
 
 - No maneja la lógica para que las credenciales sean únicas
+
+- No maneja el seteo de createdAt
 ```
 {
     "userId": "{{$randomInt}}",

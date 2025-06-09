@@ -12,7 +12,9 @@ import com.selimhorri.app.domain.Credential;
 import com.selimhorri.app.domain.User;
 import com.selimhorri.app.dto.UserDto;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
+import com.selimhorri.app.exception.wrapper.UsernameAlreadyExistsException;
 import com.selimhorri.app.helper.UserMappingHelper;
+import com.selimhorri.app.repository.CredentialRepository;
 import com.selimhorri.app.repository.UserRepository;
 import com.selimhorri.app.service.UserService;
 
@@ -26,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
-
+	private final CredentialRepository credentialRepository;
 	@Override
 	public List<UserDto> findAll() {
 		log.info("*** UserDto List, service; fetch all users *");
@@ -49,10 +51,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto save(final UserDto userDto) {
 		log.info("*** UserDto, service; save user *");
-		userDto.setUserId(null); // o 0, dependiendo de tu tipo y lógica
 
+		final String username = userDto.getCredentialDto().getUsername();
+		if (credentialRepository.findByUsername(username).isPresent()) {
+			throw new UsernameAlreadyExistsException("Username already exists: " + username);
+		}
+
+		userDto.setUserId(null); // para evitar sobrescribir
 		return UserMappingHelper.map(this.userRepository.save(UserMappingHelper.map(userDto)));
 	}
+
 
 	@Override
 	public UserDto update(final UserDto userDto) {
