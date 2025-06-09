@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import com.selimhorri.app.exception.wrapper.UsernameAlreadyExistsException;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
+import com.selimhorri.app.exception.wrapper.AddressNotFoundException;
 import com.selimhorri.app.exception.wrapper.CredentialNotFoundException;
 
 import java.time.Instant;
@@ -22,6 +23,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AddressNotFoundException.class)
+    public ResponseEntity<?> handleAddressNotFound(AddressNotFoundException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)

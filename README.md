@@ -147,3 +147,54 @@
 }
 ```
 
+# Address API - Resumen y Errores detectados
+
+### ✅ Obtener todas las direcciones
+
+* **Método:** GET
+* **Ruta:** `/api/address`
+
+
+### ✅ Obtener dirección por id
+
+* **Método:** GET
+* **Ruta:** `/api/address/{addressId}`
+
+### ✅ Agregar dirección a un usuario
+
+* **Método:** POST
+* **Ruta:** `/api/address`
+
+
+### ❌ Editar dirección por body
+
+* **Método:** PUT
+* **Ruta:** `/api/address`
+* **Problema:** No actualiza, crea una nueva
+
+### ❌ Editar dirección por query
+
+* **Método:** PUT
+* **Ruta:** `/api/address/{addressId}`
+* **Problema:** No actualiza, crea uno nueva
+
+
+### ✅ Eliminar una dirección
+
+* **Método:** DELETE
+* **Ruta:** `/api/address/{addressId}`
+
+### Ejemplo de payload
+
+```json
+{
+  "addressId": 123,
+  "fullAddress": "123 Main Street",
+  "postalCode": "12345",
+  "city": "Springfield",
+  "user": {
+    "userId": 1
+  }
+}
+```
+
