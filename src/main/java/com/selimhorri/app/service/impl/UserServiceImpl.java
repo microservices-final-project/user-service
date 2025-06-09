@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
 		if (credentialRepository.findByUsername(username).isPresent()) {
 			throw new UsernameAlreadyExistsException("Username already exists: " + username);
 		}
-
 		userDto.setUserId(null); // para evitar sobrescribir
 		return UserMappingHelper.map(this.userRepository.save(UserMappingHelper.map(userDto)));
 	}

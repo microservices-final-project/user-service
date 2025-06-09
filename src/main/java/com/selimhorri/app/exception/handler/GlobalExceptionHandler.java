@@ -1,5 +1,6 @@
 package com.selimhorri.app.exception.handler;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,8 +14,20 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityNotFoundException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    public ResponseEntity<?> handleEmptyResultDataAccess(EmptyResultDataAccessException ex) {
+        return buildResponse("No entity found to delete: " + ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFound(EntityNotFoundException ex) {
+        return buildResponse("Entity not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<?> handleUsernameAlreadyExists(UsernameAlreadyExistsException ex) {

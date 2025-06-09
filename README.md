@@ -1,3 +1,5 @@
+- No hay un manejador de excepciones, entonces todas son 500
+
 Obtener todos los usuarios
 
 GET `/user-service/api/users` Check
