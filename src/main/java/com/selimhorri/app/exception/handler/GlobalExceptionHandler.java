@@ -19,6 +19,11 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<?> handleEmptyResultDataAccess(EmptyResultDataAccessException ex) {
         return buildResponse("No entity found to delete: " + ex.getMessage(), HttpStatus.NOT_FOUND);

@@ -8,11 +8,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.selimhorri.app.domain.Credential;
 import com.selimhorri.app.domain.User;
 import com.selimhorri.app.dto.UserDto;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
-import com.selimhorri.app.exception.wrapper.UsernameAlreadyExistsException;
 import com.selimhorri.app.helper.UserMappingHelper;
 import com.selimhorri.app.repository.CredentialRepository;
 import com.selimhorri.app.repository.UserRepository;

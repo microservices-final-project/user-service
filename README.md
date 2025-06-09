@@ -78,7 +78,8 @@ Crear credenciales
 
 POST `/api/credentials`
 
-- No tiene ningun sentido tener un endpoint para crear credenciales, si estas dependen del usuario y ya el endpoint de usuario crea las credenciales
+- Crea un usuario nuevo en lugar de asociar las credenciales a ese usuario
+
 
 Actualizar credenciales por query param
 

@@ -44,6 +44,15 @@ public class CredentialResource {
 		return ResponseEntity.ok(this.credentialService.findById(Integer.parseInt(credentialId.strip())));
 	}
 	
+	@PostMapping
+	public ResponseEntity<CredentialDto> save(
+			@RequestBody 
+			@NotNull(message = "Input must not NULL") 
+			@Valid final CredentialDto credentialDto) {
+		log.info("*** CredentialDto, resource; save credential *");
+		return ResponseEntity.ok(this.credentialService.save(credentialDto));
+	}
+	
 	@PutMapping
 	public ResponseEntity<CredentialDto> update(
 			@RequestBody 

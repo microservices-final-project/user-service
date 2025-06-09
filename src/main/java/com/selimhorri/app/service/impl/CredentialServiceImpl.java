@@ -5,14 +5,18 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.selimhorri.app.domain.Credential;
+import com.selimhorri.app.domain.User;
 import com.selimhorri.app.dto.CredentialDto;
 import com.selimhorri.app.exception.wrapper.CredentialNotFoundException;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
+import com.selimhorri.app.exception.wrapper.UsernameAlreadyExistsException;
 import com.selimhorri.app.helper.CredentialMappingHelper;
 import com.selimhorri.app.repository.CredentialRepository;
+import com.selimhorri.app.repository.UserRepository;
 import com.selimhorri.app.service.CredentialService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 public class CredentialServiceImpl implements CredentialService {
 
 	private final CredentialRepository credentialRepository;
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<CredentialDto> findAll() {
@@ -48,7 +54,29 @@ public class CredentialServiceImpl implements CredentialService {
 	@Override
 	public CredentialDto save(final CredentialDto credentialDto) {
 		log.info("*** CredentialDto, service; save credential *");
-		return CredentialMappingHelper.map(this.credentialRepository.save(CredentialMappingHelper.map(credentialDto)));
+		credentialDto.setCredentialId(null);
+		if (credentialRepository.existsByUsername(credentialDto.getUsername())) {
+			throw new UsernameAlreadyExistsException("Username already exists: " + credentialDto.getUsername());
+		}
+
+		Integer userId = credentialDto.getUserDto().getUserId();
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserObjectNotFoundException("User not found with id: " + userId));
+
+		if (credentialRepository.existsByUserUserId(userId)) {
+			throw new IllegalArgumentException(
+					"User with ID " + userId + " already has credentials. You may update them instead.");
+		}
+
+		String rawPassword = credentialDto.getPassword();
+		String encodedPassword = passwordEncoder.encode(rawPassword);
+		credentialDto.setPassword(encodedPassword);
+
+		Credential credential = CredentialMappingHelper.map(credentialDto);
+		credential.setUser(user);
+
+		Credential saved = credentialRepository.save(credential);
+		return CredentialMappingHelper.map(saved);
 	}
 
 	@Override
