@@ -62,6 +62,8 @@
 ```
 # Credentials API - Resumen y Errores Detectados
 
+Este modulo no tiene en cuenta la encriptación, por lo que nada de lo que se cree aqui va lograr pasar por la autenticación del proxy-client
+
 Obtener todas las credenciales
 
 GET `/api/credentials` 

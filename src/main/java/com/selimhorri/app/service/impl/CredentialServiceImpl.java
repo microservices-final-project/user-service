@@ -84,12 +84,15 @@ public class CredentialServiceImpl implements CredentialService {
 		log.info("*** CredentialDto, service; update credential *");
 
 		Credential existingCredential = credentialRepository.findById(credentialDto.getCredentialId())
-				.orElseThrow(
-						() -> new CredentialNotFoundException(
-								"Credential not found with id: " + credentialDto.getCredentialId()));
+				.orElseThrow(() -> new CredentialNotFoundException(
+						"Credential not found with id: " + credentialDto.getCredentialId()));
 
 		existingCredential.setUsername(credentialDto.getUsername());
-		existingCredential.setPassword(credentialDto.getPassword());
+
+		// Codifica la nueva contraseña
+		String encodedPassword = passwordEncoder.encode(credentialDto.getPassword());
+		existingCredential.setPassword(encodedPassword);
+
 		existingCredential.setRoleBasedAuthority(credentialDto.getRoleBasedAuthority());
 		existingCredential.setIsEnabled(credentialDto.getIsEnabled());
 		existingCredential.setIsAccountNonExpired(credentialDto.getIsAccountNonExpired());
@@ -106,26 +109,23 @@ public class CredentialServiceImpl implements CredentialService {
 		log.info("*** CredentialDto, service; update credential with credentialId *");
 
 		Credential existingCredential = credentialRepository.findById(credentialId)
-				.orElseThrow(
-						() -> new CredentialNotFoundException(
-								"Credential not found with id: " + credentialDto.getCredentialId()));
+				.orElseThrow(() -> new CredentialNotFoundException(
+						"Credential not found with id: " + credentialDto.getCredentialId()));
 
-		// Actualizamos los campos con los datos del DTO
 		existingCredential.setUsername(credentialDto.getUsername());
-		existingCredential.setPassword(credentialDto.getPassword());
+
+		// Codifica la nueva contraseña
+		String encodedPassword = passwordEncoder.encode(credentialDto.getPassword());
+		existingCredential.setPassword(encodedPassword);
+
 		existingCredential.setRoleBasedAuthority(credentialDto.getRoleBasedAuthority());
 		existingCredential.setIsEnabled(credentialDto.getIsEnabled());
 		existingCredential.setIsAccountNonExpired(credentialDto.getIsAccountNonExpired());
 		existingCredential.setIsAccountNonLocked(credentialDto.getIsAccountNonLocked());
 		existingCredential.setIsCredentialsNonExpired(credentialDto.getIsCredentialsNonExpired());
 
-		// Opcional: si quieres actualizar el usuario asociado, deberías agregar lógica
-		// aquí
-
-		// Guardamos la entidad actualizada
 		Credential updatedCredential = this.credentialRepository.save(existingCredential);
 
-		// Mapeamos a DTO y retornamos
 		return CredentialMappingHelper.map(updatedCredential);
 	}
 
