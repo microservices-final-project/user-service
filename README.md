@@ -1,96 +1,149 @@
-#Prefijo
+# User Service API - Resumen y Errores Detectados
+
+## Prefijo
 
 `/user-service`
-
-# User Service API - Resumen y Errores Detectados
 
 ---
 
 ## Endpoints
 
-### Obtener todos los usuarios
+### ✅ Obtener todos los usuarios
 
-- **GET** `/api/users`  
-- Estado: ✔️ Check  
-- Observaciones: No hay manejo de excepciones, cualquier error devuelve 500.
+* **Método:** GET
+* **Ruta:** `/api/users`
+* **Estado:** Correcto
+* **Observaciones:**
 
----
-
-### Obtener un usuario por ID
-
-- **GET** `/api/users/{userId}`  
-- Estado: ✔️ Check
+  * No hay manejo de excepciones.
+  * Cualquier error devuelve estado 500.
 
 ---
 
-### Crear un usuario
+### ✅ Obtener un usuario por ID
 
-- **POST** `/api/users`  
+* **Método:** GET
+* **Ruta:** `/api/users/{userId}`
+* **Estado:** Correcto
+
+---
+
+### ❌ Crear un usuario
+
+* **Método:** POST
+* **Ruta:** `/api/users`
 
 #### Errores detectados:
 
-- Recibe `userId` como parámetro, lo que genera conflictos si el ID ya existe para otro usuario.
-- No verifica unicidad en las credenciales (e.g. username único).
-- No setea automáticamente el campo `createdAt`.
-- Problema con la relación `Credentials` lazy fetch: cuando se intenta acceder, la relación no está en el contexto de Hibernate, provocando fallo.
+* Recibe `userId` como parámetro: conflicto si el ID ya existe.
+* No verifica unicidad del `username`.
+* No se asigna automáticamente el campo `createdAt`.
+* Relación `Credentials` con `lazy fetch` provoca error al no estar en el contexto de Hibernate.
 
-#### Ejemplo de payload:
+#### Ejemplo de Payload:
+
 ```json
 {
-    "userId": "{{$randomInt}}",
-    "firstName": "Alejandro",
-    "lastName": "Cordoba",
-    "imageUrl": "{{$randomUrl}}",
-    "email": "{{$randomEmail}}",
-    "addressDtos": [
-        {
-            "fullAddress": "123 Main St",
-            "postalCode": "12345",
-            "city": "New York"
-        }
-    ],
-    "credential": {
-        "username": "johndoe",
-        "password": "securePassword123",
-        "roleBasedAuthority": "ROLE_USER",
-        "isEnabled": true,
-        "isAccountNonExpired": true,
-        "isAccountNonLocked": true,
-        "isCredentialsNonExpired": true
+  "userId": "{{$randomInt}}",
+  "firstName": "Alejandro",
+  "lastName": "Cordoba",
+  "imageUrl": "{{$randomUrl}}",
+  "email": "{{$randomEmail}}",
+  "addressDtos": [
+    {
+      "fullAddress": "123 Main St",
+      "postalCode": "12345",
+      "city": "New York"
     }
+  ],
+  "credential": {
+    "username": "johndoe",
+    "password": "securePassword123",
+    "roleBasedAuthority": "ROLE_USER",
+    "isEnabled": true,
+    "isAccountNonExpired": true,
+    "isAccountNonLocked": true,
+    "isCredentialsNonExpired": true
+  }
 }
 ```
+
+---
+
 # Credentials API - Resumen y Errores Detectados
 
-Este modulo no tiene en cuenta la encriptación, por lo que nada de lo que se cree aqui va lograr pasar por la autenticación del proxy-client
+> ⚠️ Este módulo no implementa encriptación, por lo tanto, las credenciales creadas no son válidas para autenticación en `proxy-client`.
 
-Obtener todas las credenciales
+### ✅ Obtener todas las credenciales
 
-GET `/api/credentials` 
+* **Método:** GET
+* **Ruta:** `/api/credentials`
+* **Estado:** Correcto
 
-Todo bien
+---
 
-Obtener credenciales por id
+### ✅ Obtener credenciales por ID
 
-GET `/api/credentials/{crendentialsId}`
+* **Método:** GET
+* **Ruta:** `/api/credentials/{credentialsId}`
+* **Estado:** Correcto
 
-Todo bien
+---
 
-Crear credenciales
+### ✅ Obtener credenciales por usuario
 
-POST `/api/credentials`
+* **Método:** GET
+* **Ruta:** `/api/credentials/username/{credentialId}`
+* **Estado:** Correcto
 
-- Crea un usuario nuevo en lugar de asociar las credenciales a ese usuario
+---
+
+### ❌ Crear credenciales
+
+* **Método:** POST
+* **Ruta:** `/api/credentials`
+
+#### Problemas:
+
+* Crea un nuevo usuario en lugar de asociar las credenciales a un usuario existente.
+
+---
+
+### ❌ Actualizar credenciales por query param
+
+* **Método:** PUT
+* **Ruta:** `/api/credentials/{credentialId}`
+* **Problema:** No actualiza
+
+---
+
+### ❌ Actualizar credenciales por body
+
+* **Método:** PUT
+* **Ruta:** `/api/credentials`
+* **Problema:** No actualiza
+
+---
+
+### ❌ Eliminar credenciales
+
+* **Método:** DELETE
+* **Ruta:** `/api/credentials/{credentialId}`
+* **Problema:** No borra
 
 
-Actualizar credenciales por query param
+### Ejemplo de payload
 
-PUT `/api/credentials/{credentialId}`
+```json
+{
+    "credentialId": "1",
+    "username": "johndsdoe",
+    "password": "securePassword123",
+    "roleBasedAuthority": "ROLE_USER",
+    "isEnabled": true,
+    "isAccountNonExpired": true,
+    "isAccountNonLocked": true,
+    "isCredentialsNonExpired": true
+}
+```
 
-- No actualiza
-
-Actualizar credenciales por body
-
-PUT `/api/credentials`
-
-- No actualiza
