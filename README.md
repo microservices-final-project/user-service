@@ -198,3 +198,12 @@
 }
 ```
 
+# VerificationToken API - Resumen y Errores detectados
+
+
+
+### ✅ Obtener todos los tokens
+
+* **Método:** GET
+* **Ruta:** `/api/verificationTokens`
+
