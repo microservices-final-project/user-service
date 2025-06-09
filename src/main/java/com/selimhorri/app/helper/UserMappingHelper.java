@@ -35,6 +35,20 @@ public interface UserMappingHelper {
 				.build();
 	}
 
+	public static User mapOnlyUser(final UserDto userDto) {
+		if (userDto == null)
+			return null;
+
+		return User.builder()
+				.userId(userDto.getUserId())
+				.firstName(userDto.getFirstName())
+				.lastName(userDto.getLastName())
+				.imageUrl(userDto.getImageUrl())
+				.email(userDto.getEmail())
+				.phone(userDto.getPhone())
+				.build();
+	}
+
 	public static User map(final UserDto userDto) {
 		final Credential credential = Credential.builder()
 				.credentialId(userDto.getCredentialDto().getCredentialId())

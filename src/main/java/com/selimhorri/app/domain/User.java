@@ -39,10 +39,10 @@ public final class User extends AbstractMappedEntity implements Serializable {
 	@Column(name = "user_id", unique = true, nullable = false, updatable = false)
 	private Integer userId;
 	
-	@Column(name = "first_name")
+	@Column(name = "first_name", nullable = false)
 	private String firstName;
 	
-	@Column(name = "last_name")
+	@Column(name = "last_name", nullable = false)
 	private String lastName;
 	
 	@Column(name = "image_url")
@@ -51,6 +51,7 @@ public final class User extends AbstractMappedEntity implements Serializable {
 	@Email(message = "*Input must be in Email format!**")
 	private String email;
 	
+	@Column(nullable = false)
 	private String phone;
 	
 	@JsonIgnore

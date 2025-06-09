@@ -51,13 +51,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto save(final UserDto userDto) {
 		log.info("*** UserDto, service; save user *");
-
-		final String username = userDto.getCredentialDto().getUsername();
-		if (credentialRepository.findByUsername(username).isPresent()) {
-			throw new UsernameAlreadyExistsException("Username already exists: " + username);
-		}
 		userDto.setUserId(null); // para evitar sobrescribir
-		return UserMappingHelper.map(this.userRepository.save(UserMappingHelper.map(userDto)));
+		return UserMappingHelper.map(this.userRepository.save(UserMappingHelper.mapOnlyUser(userDto)));
 	}
 
 
@@ -76,18 +71,6 @@ public class UserServiceImpl implements UserService {
 		existingUser.setEmail(userDto.getEmail());
 		existingUser.setPhone(userDto.getPhone());
 
-		// Actualizar credential si existe
-		if (userDto.getCredentialDto() != null && existingUser.getCredential() != null) {
-			Credential existingCredential = existingUser.getCredential();
-			existingCredential.setUsername(userDto.getCredentialDto().getUsername());
-			existingCredential.setPassword(userDto.getCredentialDto().getPassword());
-			existingCredential.setRoleBasedAuthority(userDto.getCredentialDto().getRoleBasedAuthority());
-			existingCredential.setIsEnabled(userDto.getCredentialDto().getIsEnabled());
-			existingCredential.setIsAccountNonExpired(userDto.getCredentialDto().getIsAccountNonExpired());
-			existingCredential.setIsAccountNonLocked(userDto.getCredentialDto().getIsAccountNonLocked());
-			existingCredential.setIsCredentialsNonExpired(userDto.getCredentialDto().getIsCredentialsNonExpired());
-		}
-
 		return UserMappingHelper.map(this.userRepository.save(existingUser));
 	}
 
@@ -105,19 +88,6 @@ public class UserServiceImpl implements UserService {
 		existingUser.setImageUrl(userDto.getImageUrl());
 		existingUser.setEmail(userDto.getEmail());
 		existingUser.setPhone(userDto.getPhone());
-
-		// Actualizar credential si existe en el DTO y en la entidad
-		if (userDto.getCredentialDto() != null && existingUser.getCredential() != null) {
-			Credential existingCredential = existingUser.getCredential();
-			existingCredential.setUsername(userDto.getCredentialDto().getUsername());
-			existingCredential.setPassword(userDto.getCredentialDto().getPassword());
-			existingCredential.setRoleBasedAuthority(userDto.getCredentialDto().getRoleBasedAuthority());
-			existingCredential.setIsEnabled(userDto.getCredentialDto().getIsEnabled());
-			existingCredential.setIsAccountNonExpired(userDto.getCredentialDto().getIsAccountNonExpired());
-			existingCredential.setIsAccountNonLocked(userDto.getCredentialDto().getIsAccountNonLocked());
-			existingCredential.setIsCredentialsNonExpired(userDto.getCredentialDto().getIsCredentialsNonExpired());
-		}
-
 		return UserMappingHelper.map(this.userRepository.save(existingUser));
 	}
 

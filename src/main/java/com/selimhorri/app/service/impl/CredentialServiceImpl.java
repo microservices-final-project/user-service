@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.selimhorri.app.domain.Credential;
 import com.selimhorri.app.dto.CredentialDto;
 import com.selimhorri.app.exception.wrapper.CredentialNotFoundException;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
@@ -22,68 +23,95 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class CredentialServiceImpl implements CredentialService {
-	
+
 	private final CredentialRepository credentialRepository;
-	
+
 	@Override
 	public List<CredentialDto> findAll() {
 		log.info("*** CredentialDto List, service; fetch all credentials *");
 		return this.credentialRepository.findAll()
 				.stream()
-					.map(CredentialMappingHelper::map)
-					.distinct()
-					.collect(Collectors.toUnmodifiableList());
+				.map(CredentialMappingHelper::map)
+				.distinct()
+				.collect(Collectors.toUnmodifiableList());
 	}
-	
+
 	@Override
 	public CredentialDto findById(final Integer credentialId) {
 		log.info("*** CredentialDto, service; fetch credential by ids *");
 		return this.credentialRepository.findById(credentialId)
 				.map(CredentialMappingHelper::map)
-				.orElseThrow(() -> new CredentialNotFoundException(String.format("#### Credential with id: %d not found! ####", credentialId)));
+				.orElseThrow(() -> new CredentialNotFoundException(
+						String.format("#### Credential with id: %d not found! ####", credentialId)));
 	}
-	
+
 	@Override
 	public CredentialDto save(final CredentialDto credentialDto) {
 		log.info("*** CredentialDto, service; save credential *");
 		return CredentialMappingHelper.map(this.credentialRepository.save(CredentialMappingHelper.map(credentialDto)));
 	}
-	
+
 	@Override
 	public CredentialDto update(final CredentialDto credentialDto) {
 		log.info("*** CredentialDto, service; update credential *");
-		return CredentialMappingHelper.map(this.credentialRepository.save(CredentialMappingHelper.map(credentialDto)));
+
+		Credential existingCredential = credentialRepository.findById(credentialDto.getCredentialId())
+				.orElseThrow(
+						() -> new CredentialNotFoundException(
+								"Credential not found with id: " + credentialDto.getCredentialId()));
+
+		existingCredential.setUsername(credentialDto.getUsername());
+		existingCredential.setPassword(credentialDto.getPassword());
+		existingCredential.setRoleBasedAuthority(credentialDto.getRoleBasedAuthority());
+		existingCredential.setIsEnabled(credentialDto.getIsEnabled());
+		existingCredential.setIsAccountNonExpired(credentialDto.getIsAccountNonExpired());
+		existingCredential.setIsAccountNonLocked(credentialDto.getIsAccountNonLocked());
+		existingCredential.setIsCredentialsNonExpired(credentialDto.getIsCredentialsNonExpired());
+
+		Credential updatedCredential = credentialRepository.save(existingCredential);
+
+		return CredentialMappingHelper.map(updatedCredential);
 	}
-	
+
 	@Override
 	public CredentialDto update(final Integer credentialId, final CredentialDto credentialDto) {
 		log.info("*** CredentialDto, service; update credential with credentialId *");
-		return CredentialMappingHelper.map(this.credentialRepository.save(
-				CredentialMappingHelper.map(this.findById(credentialId))));
+
+		Credential existingCredential = credentialRepository.findById(credentialId)
+				.orElseThrow(
+						() -> new CredentialNotFoundException(
+								"Credential not found with id: " + credentialDto.getCredentialId()));
+
+		// Actualizamos los campos con los datos del DTO
+		existingCredential.setUsername(credentialDto.getUsername());
+		existingCredential.setPassword(credentialDto.getPassword());
+		existingCredential.setRoleBasedAuthority(credentialDto.getRoleBasedAuthority());
+		existingCredential.setIsEnabled(credentialDto.getIsEnabled());
+		existingCredential.setIsAccountNonExpired(credentialDto.getIsAccountNonExpired());
+		existingCredential.setIsAccountNonLocked(credentialDto.getIsAccountNonLocked());
+		existingCredential.setIsCredentialsNonExpired(credentialDto.getIsCredentialsNonExpired());
+
+		// Opcional: si quieres actualizar el usuario asociado, deberías agregar lógica
+		// aquí
+
+		// Guardamos la entidad actualizada
+		Credential updatedCredential = this.credentialRepository.save(existingCredential);
+
+		// Mapeamos a DTO y retornamos
+		return CredentialMappingHelper.map(updatedCredential);
 	}
-	
+
 	@Override
 	public void deleteById(final Integer credentialId) {
 		log.info("*** Void, service; delete credential by id *");
 		this.credentialRepository.deleteById(credentialId);
 	}
-	
+
 	@Override
 	public CredentialDto findByUsername(final String username) {
 		return CredentialMappingHelper.map(this.credentialRepository.findByUsername(username)
-				.orElseThrow(() -> new UserObjectNotFoundException(String.format("#### Credential with username: %s not found! ####", username))));
+				.orElseThrow(() -> new UserObjectNotFoundException(
+						String.format("#### Credential with username: %s not found! ####", username))));
 	}
-	
-	
-	
+
 }
-
-
-
-
-
-
-
-
-
-
