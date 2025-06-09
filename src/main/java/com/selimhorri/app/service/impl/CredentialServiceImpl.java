@@ -52,6 +52,13 @@ public class CredentialServiceImpl implements CredentialService {
 	}
 
 	@Override
+	public CredentialDto findByUsername(final String username) {
+		return CredentialMappingHelper.map(this.credentialRepository.findByUsername(username)
+				.orElseThrow(() -> new UserObjectNotFoundException(
+						String.format("#### Credential with username: %s not found! ####", username))));
+	}
+
+	@Override
 	public CredentialDto save(final CredentialDto credentialDto) {
 		log.info("*** CredentialDto, service; save credential *");
 		credentialDto.setCredentialId(null);
@@ -128,18 +135,12 @@ public class CredentialServiceImpl implements CredentialService {
 
 		return CredentialMappingHelper.map(updatedCredential);
 	}
-
+	
+	@Transactional
 	@Override
 	public void deleteById(final Integer credentialId) {
 		log.info("*** Void, service; delete credential by id *");
 		this.credentialRepository.deleteById(credentialId);
-	}
-
-	@Override
-	public CredentialDto findByUsername(final String username) {
-		return CredentialMappingHelper.map(this.credentialRepository.findByUsername(username)
-				.orElseThrow(() -> new UserObjectNotFoundException(
-						String.format("#### Credential with username: %s not found! ####", username))));
 	}
 
 }

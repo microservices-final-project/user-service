@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
-	private final CredentialRepository credentialRepository;
 	@Override
 	public List<UserDto> findAll() {
 		log.info("*** UserDto List, service; fetch all users *");
