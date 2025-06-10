@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 import com.selimhorri.app.exception.wrapper.UsernameAlreadyExistsException;
+import com.selimhorri.app.exception.wrapper.VerificationTokenNotFoundException;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
 import com.selimhorri.app.exception.wrapper.AddressNotFoundException;
 import com.selimhorri.app.exception.wrapper.CredentialNotFoundException;
@@ -27,6 +28,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AddressNotFoundException.class)
     public ResponseEntity<?> handleAddressNotFound(AddressNotFoundException ex) {
+        return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(VerificationTokenNotFoundException.class)
+    public ResponseEntity<?> handleVerificationTokenNotFound(VerificationTokenNotFoundException ex) {
         return buildResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 

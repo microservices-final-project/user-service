@@ -218,3 +218,22 @@
 * **Ruta:** `/api/verificationTokens`
 * **Problema:** No crea una nueva, sino que sobreescribe la que llega por id
 
+
+### ❌ Editar token por body
+
+* **Método:** PUT
+* **Ruta:** `/api/verificationTokens`
+* **Problema:** Se puede cambiar a que credencial hace referencia el token
+
+### ❌ Editar token por query
+
+* **Método:** PUT
+* **Ruta:** `/api/verificationTokens`
+* **Problema:** Se puede cambiar a que credencial hace referencia el token
+
+### ❌ Eliminar token
+
+* **Método:** DELETE
+* **Ruta:** `/api/verificationTokens`
+* **Problema:** No elimina
+

@@ -79,22 +79,58 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 	@Override
 	public VerificationTokenDto update(final VerificationTokenDto verificationTokenDto) {
 		log.info("*** VerificationTokenDto, service; update verificationToken *");
-		return VerificationTokenMappingHelper.map(this.verificationTokenRepository
-				.save(VerificationTokenMappingHelper.map(verificationTokenDto)));
+
+		// Obtener el token actual desde la base de datos
+		VerificationToken existingToken = verificationTokenRepository
+				.findById(verificationTokenDto.getVerificationTokenId())
+				.orElseThrow(() -> new VerificationTokenNotFoundException("Token not found"));
+
+		// Mapear el DTO sin cambiar la credencial
+		VerificationToken updatedToken = VerificationTokenMappingHelper.mapOnlyVerificationToken(verificationTokenDto);
+
+		// Restaurar la relación original con la Credential
+		updatedToken.setCredential(existingToken.getCredential());
+
+		// Guardar y retornar
+		return VerificationTokenMappingHelper.map(verificationTokenRepository.save(updatedToken));
 	}
 
 	@Override
 	public VerificationTokenDto update(final Integer verificationTokenId,
 			final VerificationTokenDto verificationTokenDto) {
 		log.info("*** VerificationTokenDto, service; update verificationToken with verificationTokenId *");
-		return VerificationTokenMappingHelper.map(this.verificationTokenRepository.save(
-				VerificationTokenMappingHelper.map(this.findById(verificationTokenId))));
+
+		// Obtener el token actual desde la base de datos
+		VerificationToken existingToken = verificationTokenRepository
+				.findById(verificationTokenId)
+				.orElseThrow(() -> new VerificationTokenNotFoundException("Token not found"));
+
+		// Mapear el DTO sin cambiar la credencial
+		VerificationToken updatedToken = VerificationTokenMappingHelper.mapOnlyVerificationToken(verificationTokenDto);
+
+		// Restaurar la relación original con la Credential
+		updatedToken.setCredential(existingToken.getCredential());
+
+		// Asegurarse de que se mantenga el mismo ID
+		updatedToken.setVerificationTokenId(existingToken.getVerificationTokenId());
+
+		// Guardar y retornar
+		return VerificationTokenMappingHelper.map(verificationTokenRepository.save(updatedToken));
 	}
 
+	@Transactional
 	@Override
 	public void deleteById(final Integer verificationTokenId) {
-		log.info("*** Void, service; delete verificationToken by id *");
-		this.verificationTokenRepository.deleteById(verificationTokenId);
+		log.info("*** Void, service; delete verificationToken by id with query ***");
+
+		boolean exists = verificationTokenRepository.existsById(verificationTokenId);
+		if (!exists) {
+			log.warn("VerificationToken with id {} not found", verificationTokenId);
+			throw new VerificationTokenNotFoundException(
+					"VerificationToken with id " + verificationTokenId + " not found");
+		}
+
+		this.verificationTokenRepository.deleteByIdCustom(verificationTokenId);
 	}
 
 }
