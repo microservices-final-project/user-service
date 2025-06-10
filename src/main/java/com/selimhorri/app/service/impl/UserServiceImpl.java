@@ -12,6 +12,7 @@ import com.selimhorri.app.domain.User;
 import com.selimhorri.app.dto.UserDto;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
 import com.selimhorri.app.helper.UserMappingHelper;
+import com.selimhorri.app.repository.CredentialRepository;
 import com.selimhorri.app.repository.UserRepository;
 import com.selimhorri.app.service.UserService;
 
@@ -25,11 +26,14 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
+	private final CredentialRepository credentialRepository;
+
 	@Override
 	public List<UserDto> findAll() {
-		log.info("*** UserDto List, service; fetch all users *");
+		log.info("*** UserDto List, service; fetch all users with credentials *");
 		return this.userRepository.findAll()
 				.stream()
+				.filter(user -> user.getCredential() != null) // Asumiendo que hay un getCredentials()
 				.map(UserMappingHelper::map)
 				.distinct()
 				.collect(Collectors.toUnmodifiableList());
@@ -37,11 +41,21 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDto findById(final Integer userId) {
-		log.info("*** UserDto, service; fetch user by id *");
+		log.info("*** UserDto, service; fetch user by id with credentials *");
 		return this.userRepository.findById(userId)
+				.filter(user -> user.getCredential() != null) // Filtramos que tenga credenciales
 				.map(UserMappingHelper::map)
 				.orElseThrow(
-						() -> new UserObjectNotFoundException(String.format("User with id: %d not found", userId)));
+						() -> new UserObjectNotFoundException(
+								String.format("User with id: %d not found or has no credentials", userId)));
+	}
+
+	@Override
+	public UserDto findByUsername(final String username) {
+		log.info("*** UserDto, service; fetch user with username *");
+		return UserMappingHelper.map(this.userRepository.findByCredentialUsername(username)
+				.orElseThrow(() -> new UserObjectNotFoundException(
+						String.format("User with username: %s not found", username))));
 	}
 
 	@Override
@@ -51,16 +65,17 @@ public class UserServiceImpl implements UserService {
 		return UserMappingHelper.map(this.userRepository.save(UserMappingHelper.mapOnlyUser(userDto)));
 	}
 
-
 	@Override
 	public UserDto update(final UserDto userDto) {
 		log.info("*** UserDto, service; update user ***");
 
-		// Buscar la entidad existente
+		// Buscar el usuario y verificar que tenga credenciales
 		User existingUser = this.userRepository.findById(userDto.getUserId())
-				.orElseThrow(() -> new EntityNotFoundException("User not found"));
+				.filter(user -> user.getCredential() != null) // Solo si tiene credenciales
+				.orElseThrow(() -> new EntityNotFoundException(
+						"User not found or has no credentials (cannot update)"));
 
-		// Actualizar los campos
+		// Actualizar campos permitidos
 		existingUser.setFirstName(userDto.getFirstName());
 		existingUser.setLastName(userDto.getLastName());
 		existingUser.setImageUrl(userDto.getImageUrl());
@@ -74,31 +89,44 @@ public class UserServiceImpl implements UserService {
 	public UserDto update(final Integer userId, final UserDto userDto) {
 		log.info("*** UserDto, service; update user with userId ***");
 
-		// Buscar la entidad existente por el userId del parámetro
+		// Verificar que el usuario existe y tiene credenciales
 		User existingUser = this.userRepository.findById(userId)
-				.orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+				.filter(user -> user.getCredential() != null) // Solo si tiene credenciales
+				.orElseThrow(() -> new EntityNotFoundException(
+						"User not found with id: " + userId + " or has no credentials (cannot update)"));
 
-		// Actualizar los campos con los datos del userDto
+		// Actualizar campos permitidos
 		existingUser.setFirstName(userDto.getFirstName());
 		existingUser.setLastName(userDto.getLastName());
 		existingUser.setImageUrl(userDto.getImageUrl());
 		existingUser.setEmail(userDto.getEmail());
 		existingUser.setPhone(userDto.getPhone());
+
 		return UserMappingHelper.map(this.userRepository.save(existingUser));
 	}
 
 	@Override
+	@Transactional // Asegura que sea una transacción atómica
 	public void deleteById(final Integer userId) {
-		log.info("*** Void, service; delete user by id *");
-		this.userRepository.deleteById(userId);
-	}
+		log.info("*** Void, service; delete credentials from user by id ***");
 
-	@Override
-	public UserDto findByUsername(final String username) {
-		log.info("*** UserDto, service; fetch user with username *");
-		return UserMappingHelper.map(this.userRepository.findByCredentialUsername(username)
-				.orElseThrow(() -> new UserObjectNotFoundException(
-						String.format("User with username: %s not found", username))));
+		// 1. Buscar el usuario y verificar que existe y tiene credenciales
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+		if (user.getCredential() == null) {
+			throw new IllegalStateException("User with id: " + userId + " has no credentials to delete");
+		}
+
+		// 2. Obtener el ID de las credenciales para borrarlas
+		Integer credentialsId = user.getCredential().getCredentialId();
+
+		// 3. Desvincular las credenciales del usuario (para evitar inconsistencias)
+		user.setCredential(null);
+		userRepository.save(user); // Guardar el cambio
+
+		// 4. Borrar las credenciales de la base de datos
+		credentialRepository.deleteByCredentialId(credentialsId);
 	}
 
 }
