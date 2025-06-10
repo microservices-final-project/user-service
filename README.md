@@ -237,3 +237,17 @@
 * **Ruta:** `/api/verificationTokens`
 * **Problema:** No elimina
 
+
+### Ejemplo de payload
+
+```json
+{
+  "verificationTokenId": 1,
+  "token": "abc123def456",
+  "expireDate": "30-06-2025",
+  "credential": {
+    "credentialId": 1
+  }
+}
+```
+
