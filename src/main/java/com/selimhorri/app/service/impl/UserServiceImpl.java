@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
 		if (user.getCredential() == null) {
-			throw new IllegalStateException("User with id: " + userId + " has no credentials to delete");
+			throw new UserObjectNotFoundException("User with id: " + userId + " has no credentials to delete");
 		}
 
 		// 2. Obtener el ID de las credenciales para borrarlas
