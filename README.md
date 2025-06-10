@@ -200,10 +200,21 @@
 
 # VerificationToken API - Resumen y Errores detectados
 
-
-
-### ✅ Obtener todos los tokens
+### ❌ Obtener todos los tokens
 
 * **Método:** GET
 * **Ruta:** `/api/verificationTokens`
+* **Problema:** Por el localdate, no se puede obtener porque falta una configuración con jackson
+
+### ❌ Obtener token por id
+
+* **Método:** GET
+* **Ruta:** `/api/verificationTokens/{verificationTokenId}`
+* **Problema:** Por el localdate, no se puede obtener porque falta una configuración con jackson
+
+### ❌ Crear token a credencial
+
+* **Método:** POST
+* **Ruta:** `/api/verificationTokens`
+* **Problema:** No crea una nueva, sino que sobreescribe la que llega por id
 
