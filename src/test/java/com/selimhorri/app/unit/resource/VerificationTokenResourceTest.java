@@ -1,4 +1,4 @@
-package com.selimhorri.app.resource;
+package com.selimhorri.app.unit.resource;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,11 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.selimhorri.app.dto.CredentialDto;
 import com.selimhorri.app.dto.VerificationTokenDto;
-import com.selimhorri.app.dto.response.collection.DtoCollectionResponse;
 import com.selimhorri.app.exception.handler.GlobalExceptionHandler;
 import com.selimhorri.app.exception.wrapper.VerificationTokenNotFoundException;
+import com.selimhorri.app.resource.VerificationTokenResource;
 import com.selimhorri.app.service.VerificationTokenService;
 
+@Tag("integration")
 @ExtendWith(MockitoExtension.class)
 public class VerificationTokenResourceTest {
 

@@ -1,4 +1,4 @@
-package com.selimhorri.app.resource;
+package com.selimhorri.app.unit.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selimhorri.app.domain.RoleBasedAuthority;

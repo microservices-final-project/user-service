@@ -1,4 +1,4 @@
-package com.selimhorri.app.resource;
+package com.selimhorri.app.unit.resource;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -20,8 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selimhorri.app.dto.AddressDto;
 import com.selimhorri.app.dto.UserDto;
-import com.selimhorri.app.dto.response.collection.DtoCollectionResponse;
-import com.selimhorri.app.exception.wrapper.AddressNotFoundException;
+import com.selimhorri.app.resource.AddressResource;
 import com.selimhorri.app.service.AddressService;
 
 @ExtendWith(MockitoExtension.class)
