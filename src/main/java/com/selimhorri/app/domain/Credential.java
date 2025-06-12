@@ -3,6 +3,7 @@ package com.selimhorri.app.domain;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.annotation.Generated;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +36,6 @@ import lombok.NoArgsConstructor;
 public final class Credential extends AbstractMappedEntity implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "credential_id", unique = true, nullable = false, updatable = false)

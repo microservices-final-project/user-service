@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-public class VerificationTokenServiceImpl implements VerificationTokenService {
+public class VerificationTokenServiceImpl implements VerificationTokenService{
 
 	private final VerificationTokenRepository verificationTokenRepository;
 	private final CredentialRepository credentialRepository;
