@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.selimhorri.app.exception.payload.ExceptionMsg;
-import com.selimhorri.app.exception.wrapper.AddressNotFoundException;
-import com.selimhorri.app.exception.wrapper.VerificationTokenNotFoundException;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

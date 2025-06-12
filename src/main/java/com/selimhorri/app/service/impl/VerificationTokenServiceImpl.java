@@ -1,5 +1,6 @@
 package com.selimhorri.app.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-public class VerificationTokenServiceImpl implements VerificationTokenService{
+public class VerificationTokenServiceImpl implements VerificationTokenService {
 
 	private final VerificationTokenRepository verificationTokenRepository;
 	private final CredentialRepository credentialRepository;
@@ -59,6 +60,14 @@ public class VerificationTokenServiceImpl implements VerificationTokenService{
 
 		if (credentialId == null) {
 			throw new IllegalArgumentException("Credential ID must not be null");
+		}
+		if (verificationTokenDto.getToken() != null && verificationTokenDto.getToken().length() > 255) {
+			throw new IllegalArgumentException("Token must not exceed 255 characters");
+		}
+
+		if (verificationTokenDto.getExpireDate() != null
+				&& verificationTokenDto.getExpireDate().isBefore(LocalDate.now())) {
+			throw new IllegalArgumentException("Expire date must not be in the past");
 		}
 
 		// Verificar que la credencial exista en la base de datos
