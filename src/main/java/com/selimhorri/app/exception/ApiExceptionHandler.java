@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.selimhorri.app.exception.payload.ExceptionMsg;
 import com.selimhorri.app.exception.wrapper.AddressNotFoundException;
-import com.selimhorri.app.exception.wrapper.CredentialNotFoundException;
-import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
 import com.selimhorri.app.exception.wrapper.VerificationTokenNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -44,8 +42,6 @@ public class ApiExceptionHandler {
 	}
 	
 	@ExceptionHandler(value = {
-		UserObjectNotFoundException.class,
-		CredentialNotFoundException.class,
 		VerificationTokenNotFoundException.class,
 		AddressNotFoundException.class,
 	})

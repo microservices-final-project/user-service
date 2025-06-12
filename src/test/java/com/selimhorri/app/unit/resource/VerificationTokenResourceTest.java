@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +27,6 @@ import com.selimhorri.app.exception.wrapper.VerificationTokenNotFoundException;
 import com.selimhorri.app.resource.VerificationTokenResource;
 import com.selimhorri.app.service.VerificationTokenService;
 
-@Tag("integration")
 @ExtendWith(MockitoExtension.class)
 public class VerificationTokenResourceTest {
 

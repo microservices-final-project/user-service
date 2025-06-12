@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<?> handleUsernameAlreadyExists(UsernameAlreadyExistsException ex) {
-        return buildResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserObjectNotFoundException.class)
