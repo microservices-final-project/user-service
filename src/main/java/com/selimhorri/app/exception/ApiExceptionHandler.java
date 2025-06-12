@@ -40,26 +40,7 @@ public class ApiExceptionHandler {
 							.now(ZoneId.systemDefault()))
 					.build(), badRequest);
 	}
-	
-	@ExceptionHandler(value = {
-		VerificationTokenNotFoundException.class,
-		AddressNotFoundException.class,
-	})
-	public <T extends RuntimeException> ResponseEntity<ExceptionMsg> handleApiRequestException(final T e) {
-		
-		log.info("**ApiExceptionHandler controller, handle API request*\n");
-		final var badRequest = HttpStatus.BAD_REQUEST;
-		
-		return new ResponseEntity<>(
-				ExceptionMsg.builder()
-					.msg("#### " + e.getMessage() + "! ####")
-					.httpStatus(badRequest)
-					.timestamp(ZonedDateTime
-							.now(ZoneId.systemDefault()))
-					.build(), badRequest);
-	}
-	
-	
+
 	
 }
 
