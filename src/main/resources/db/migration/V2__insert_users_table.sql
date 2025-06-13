@@ -4,4 +4,5 @@ INSERT INTO users (first_name, last_name) VALUES
 ('omar', 'derouiche'),
 ('admin', 'admin'),
 ('kofi', 'kofi'),
-('alejo', 'alejo');
+('alejo', 'alejo'),
+('user', 'user');
