@@ -1,7 +1,5 @@
 package com.selimhorri.app.domain;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +22,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true, exclude = {"user"})
 @Data
 @Builder
-public final class Address extends AbstractMappedEntity implements Serializable {
+public final class Address extends AbstractMappedEntity{
 	
 	private static final long serialVersionUID = 1L;
 	

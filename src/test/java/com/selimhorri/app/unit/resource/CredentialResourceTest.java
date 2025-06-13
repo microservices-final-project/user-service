@@ -1,4 +1,4 @@
-package com.selimhorri.app.resource;
+package com.selimhorri.app.unit.resource;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -21,11 +21,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selimhorri.app.domain.RoleBasedAuthority;
 import com.selimhorri.app.dto.CredentialDto;
 import com.selimhorri.app.dto.UserDto;
-import com.selimhorri.app.dto.response.collection.DtoCollectionResponse;
 import com.selimhorri.app.exception.handler.GlobalExceptionHandler;
 import com.selimhorri.app.exception.wrapper.CredentialNotFoundException;
 import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
 import com.selimhorri.app.exception.wrapper.UsernameAlreadyExistsException;
+import com.selimhorri.app.resource.CredentialResource;
 import com.selimhorri.app.service.CredentialService;
 
 @ExtendWith(MockitoExtension.class)

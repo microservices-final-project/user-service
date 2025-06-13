@@ -1,4 +1,4 @@
-package com.selimhorri.app.service;
+package com.selimhorri.app.unit.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -262,7 +262,7 @@ public class AddressServiceTest {
         when(addressRepository.findById(1)).thenReturn(Optional.of(address));
         when(addressRepository.save(any(Address.class))).thenReturn(address);
         
-        AddressDto result = addressService.update(1, addressDto);
+        addressService.update(1, addressDto);
         
         // Verificar que el usuario original se mantuvo
         assertEquals(1, address.getUser().getUserId());

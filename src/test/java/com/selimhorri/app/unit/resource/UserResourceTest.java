@@ -1,4 +1,4 @@
-package com.selimhorri.app.resource;
+package com.selimhorri.app.unit.resource;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.selimhorri.app.dto.UserDto;
-import com.selimhorri.app.exception.wrapper.UserObjectNotFoundException;
+import com.selimhorri.app.resource.UserResource;
 import com.selimhorri.app.service.UserService;
 
 @ExtendWith(MockitoExtension.class)

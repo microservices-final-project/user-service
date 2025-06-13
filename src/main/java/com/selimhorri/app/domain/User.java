@@ -1,6 +1,5 @@
 package com.selimhorri.app.domain;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -30,7 +29,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true, exclude = {"addresses", "credential"})
 @Data
 @Builder
-public final class User extends AbstractMappedEntity implements Serializable {
+public final class User extends AbstractMappedEntity{
 	
 	private static final long serialVersionUID = 1L;
 	

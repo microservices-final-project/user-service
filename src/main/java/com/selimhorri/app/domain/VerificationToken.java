@@ -1,6 +1,5 @@
 package com.selimhorri.app.domain;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
@@ -32,7 +31,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true, exclude = {"credential"})
 @Data
 @Builder
-public final class VerificationToken extends AbstractMappedEntity implements Serializable {
+public final class VerificationToken extends AbstractMappedEntity{
 	
 	private static final long serialVersionUID = 1L;
 	

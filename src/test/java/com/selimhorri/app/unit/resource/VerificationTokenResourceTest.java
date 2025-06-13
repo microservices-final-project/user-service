@@ -1,4 +1,4 @@
-package com.selimhorri.app.resource;
+package com.selimhorri.app.unit.resource;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -22,9 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.selimhorri.app.dto.CredentialDto;
 import com.selimhorri.app.dto.VerificationTokenDto;
-import com.selimhorri.app.dto.response.collection.DtoCollectionResponse;
 import com.selimhorri.app.exception.handler.GlobalExceptionHandler;
 import com.selimhorri.app.exception.wrapper.VerificationTokenNotFoundException;
+import com.selimhorri.app.resource.VerificationTokenResource;
 import com.selimhorri.app.service.VerificationTokenService;
 
 @ExtendWith(MockitoExtension.class)

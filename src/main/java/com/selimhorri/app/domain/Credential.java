@@ -1,9 +1,7 @@
 package com.selimhorri.app.domain;
 
-import java.io.Serializable;
 import java.util.Set;
 
-import javax.annotation.Generated;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,7 +31,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true, exclude = {"user", "verificationTokens"})
 @Data
 @Builder
-public final class Credential extends AbstractMappedEntity implements Serializable {
+public final class Credential extends AbstractMappedEntity{
 	
 	private static final long serialVersionUID = 1L;
 	@Id

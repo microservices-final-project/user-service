@@ -1,5 +1,4 @@
-package com.selimhorri.app.service;
-
+package com.selimhorri.app.unit.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -21,7 +20,6 @@ import com.selimhorri.app.dto.CredentialDto;
 import com.selimhorri.app.dto.VerificationTokenDto;
 import com.selimhorri.app.exception.wrapper.CredentialNotFoundException;
 import com.selimhorri.app.exception.wrapper.VerificationTokenNotFoundException;
-import com.selimhorri.app.helper.VerificationTokenMappingHelper;
 import com.selimhorri.app.repository.CredentialRepository;
 import com.selimhorri.app.repository.VerificationTokenRepository;
 import com.selimhorri.app.service.impl.VerificationTokenServiceImpl;
@@ -239,7 +237,7 @@ public class VerificationTokenServiceTest {
         when(verificationTokenRepository.findById(1)).thenReturn(Optional.of(verificationToken));
         when(verificationTokenRepository.save(any(VerificationToken.class))).thenReturn(verificationToken);
         
-        VerificationTokenDto result = verificationTokenService.update(tokenDto);
+        verificationTokenService.update(tokenDto);
         
         // Verificar que la credencial original se mantuvo
         assertEquals(1, verificationToken.getCredential().getCredentialId());
